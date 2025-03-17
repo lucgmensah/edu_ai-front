@@ -6,7 +6,7 @@ import { topics } from './Training';
 export function Dashboard() {
   const performance = useStore((state) => state.performance);
   const recommendations = useStore((state) => state.recommendations);
-  const user = useStore((state) => state.user);
+  // const user = useStore((state) => state.user);
 
   const getPriorityColor = (priority: 'high' | 'medium' | 'low') => {
     switch (priority) {
