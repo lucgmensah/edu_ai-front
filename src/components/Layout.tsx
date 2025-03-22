@@ -7,9 +7,11 @@ export function Layout() {
   const location = useLocation();
   const user = useStore((state) => state.user);
   const setUser = useStore((state) => state.setUser);
+  const setToken = useStore((state) => state.setToken);
 
   const handleLogout = () => {
     setUser(null);
+    setToken(null);
   };
 
   return (

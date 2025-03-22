@@ -1,7 +1,8 @@
 import React from 'react';
 import { BarChart, Trophy, Target, Clock, Lightbulb, Share2 } from 'lucide-react';
 import { useStore } from '../store/useStore';
-import { topics } from './Training';
+// import { topics } from './Training';
+
 
 export function Dashboard() {
   const performance = useStore((state) => state.performance);
@@ -118,29 +119,7 @@ export function Dashboard() {
             </h3>
           </div>
           <div className="mt-4 space-y-4">
-            {recommendations.length === 0 ? (
-              <p className="text-gray-500">Complete more exercises to get personalized recommendations!</p>
-            ) : (
-              recommendations.map((rec) => {
-                const topic = topics.find(t => t.id === rec.topicId);
-                return (
-                  <div
-                    key={rec.topicId}
-                    className={`p-4 rounded-lg ${getPriorityColor(rec.priority)}`}
-                  >
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <h4 className="font-medium">{topic?.name}</h4>
-                        <p className="text-sm mt-1">{rec.reason}</p>
-                      </div>
-                      <button className="px-3 py-1 bg-white rounded-md shadow-sm text-sm font-medium hover:bg-gray-50">
-                        Practice Now
-                      </button>
-                    </div>
-                  </div>
-                );
-              })
-            )}
+            <p className="text-gray-500">Complete more exercises to get personalized recommendations!</p>
           </div>
         </div>
       </div>

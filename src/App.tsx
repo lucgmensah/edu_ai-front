@@ -6,9 +6,10 @@ import { ExerciseView } from './pages/ExerciseView';
 import { Dashboard } from './pages/Dashboard';
 import { Login } from './pages/Login';
 import { useStore } from './store/useStore';
+import { SelectTopics } from './pages/SelectTopics';
 
 function App() {
-  const user = useStore((state) => state.user);
+  const token = useStore((state) => state.token);
 
   return (
     <BrowserRouter>
@@ -16,11 +17,12 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route
           element={
-            user ? <Layout /> : <Navigate to="/login" replace />
+            token ? <Layout /> : <Navigate to="/login" replace />
           }
         >
           <Route path="/" element={<Dashboard />} />
           <Route path="/training" element={<Training />} />
+          <Route path="/select-topics" element={<SelectTopics />} />
           <Route path="/exercise" element={<ExerciseView />} />
         </Route>
       </Routes>
