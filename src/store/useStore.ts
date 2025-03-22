@@ -3,12 +3,14 @@ import { Topic, Question, User, Performance, CompletedExercise, TopicRecommendat
 
 interface State {
   user: User | null;
+  token: string | null; // Ajoutez cette ligne
   selectedTopics: Topic[];
   currentQuestions: Question[];
   performance: Performance;
   completedExercises: CompletedExercise[];
   recommendations: TopicRecommendation[];
   setUser: (user: User | null) => void;
+  setToken: (token: string | null) => void; // Ajoutez cette ligne
   setSelectedTopics: (topics: Topic[]) => void;
   setCurrentQuestions: (questions: Question[]) => void;
   updatePerformance: (performance: Performance) => void;
@@ -18,6 +20,7 @@ interface State {
 
 export const useStore = create<State>((set, get) => ({
   user: null,
+  token: null, // Ajoutez cette ligne
   selectedTopics: [],
   currentQuestions: [],
   performance: {
@@ -29,6 +32,7 @@ export const useStore = create<State>((set, get) => ({
   completedExercises: [],
   recommendations: [],
   setUser: (user) => set({ user }),
+  setToken: (token) => set({ token }), // Ajoutez cette ligne
   setSelectedTopics: (topics) => set({ selectedTopics: topics }),
   setCurrentQuestions: (questions) => set({ currentQuestions: questions }),
   updatePerformance: (performance) => set({ performance }),

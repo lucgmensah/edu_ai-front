@@ -15,8 +15,7 @@ export interface Question {
 
 export interface User {
   id: string;
-  name: string;
-  email: string;
+  username: string;
 }
 
 export interface Performance {
