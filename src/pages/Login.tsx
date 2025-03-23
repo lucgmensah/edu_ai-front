@@ -6,7 +6,7 @@ import axios from 'axios';
 
 export function Login() {
   const navigate = useNavigate();
-  const setUser = useStore((state) => state.setUser);
+  // const setUser = useStore((state) => state.setUser);
   const setToken = useStore((state) => state.setToken); // Ajoutez cette ligne
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -24,10 +24,10 @@ export function Login() {
         },
       });
       const data = response.data;
-      setUser({
-        id: data.id,
-        username: data.username,
-      });
+      // setUser({
+      //   id: data.id,
+      //   username: data.username,
+      // });
       setToken(data.access_token); // Ajoutez cette ligne
       localStorage.setItem('token', data.access_token); // Stocker le token dans le localStorage
       navigate('/');

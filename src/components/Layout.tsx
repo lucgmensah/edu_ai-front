@@ -1,5 +1,5 @@
 import React from 'react';
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { BookOpen, LogOut } from 'lucide-react';
 import { useStore } from '../store/useStore';
 
@@ -8,10 +8,13 @@ export function Layout() {
   const user = useStore((state) => state.user);
   const setUser = useStore((state) => state.setUser);
   const setToken = useStore((state) => state.setToken);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     setUser(null);
     setToken(null);
+    localStorage.removeItem('token');
+    navigate('/login');
   };
 
   return (
