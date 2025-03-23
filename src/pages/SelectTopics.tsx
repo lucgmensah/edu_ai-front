@@ -44,7 +44,7 @@ export function SelectTopics() {
         if (selectedTopics.length > 0 && selectedExerciseType) {
             console.log(selectedTopics);
             console.log(selectedExerciseType);
-            navigate('/exercise');
+            navigate('/exercise/1');
         }
     };
 

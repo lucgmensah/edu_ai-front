@@ -7,6 +7,7 @@ import { Dashboard } from './pages/Dashboard';
 import { Login } from './pages/Login';
 import { useStore } from './store/useStore';
 import { SelectTopics } from './pages/SelectTopics';
+import { ExerciseReport } from './pages/ExerciseReport';
 
 function App() {
   const setToken = useStore((state) => state.setToken);
@@ -30,7 +31,8 @@ function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/training" element={<Training />} />
           <Route path="/select-topics" element={<SelectTopics />} />
-          <Route path="/exercise" element={<ExerciseView />} />
+          <Route path="/exercise/:id" element={<ExerciseView />} />
+          <Route path="/exercise/:id/report" element={<ExerciseReport />} />
         </Route>
       </Routes>
     </BrowserRouter>

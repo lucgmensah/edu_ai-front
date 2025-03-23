@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import type { Question } from '../types';
 
@@ -20,6 +20,7 @@ const mockQuestions: Question[] = [
 ];
 
 export function ExerciseView() {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -64,7 +65,7 @@ export function ExerciseView() {
         });
       });
       
-      navigate('/');
+      navigate('/exercise/' + id + '/report');
     }
   };
 
