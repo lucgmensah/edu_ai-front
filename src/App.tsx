@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { Training } from './pages/Training';
@@ -9,7 +9,14 @@ import { useStore } from './store/useStore';
 import { SelectTopics } from './pages/SelectTopics';
 
 function App() {
-  const token = useStore((state) => state.token);
+  const setToken = useStore((state) => state.setToken);
+
+  const storedToken = localStorage.getItem('token');
+  useEffect(() => {
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, [setToken]);
 
   return (
     <BrowserRouter>
@@ -17,7 +24,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route
           element={
-            token ? <Layout /> : <Navigate to="/login" replace />
+            storedToken ? <Layout /> : <Navigate to="/login" replace />
           }
         >
           <Route path="/" element={<Dashboard />} />

@@ -16,8 +16,8 @@ const WebClient: AxiosInstance = axios.create({
 
 // Fonction pour récupérer le token depuis le store
 const getToken = () => {
-    const state = useStore.getState();
-    return state.token;
+    const storedToken = localStorage.getItem('token');
+    return storedToken;
 };
 
 // Intercepteur pour ajouter les en-têtes à chaque requête

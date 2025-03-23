@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { BookOpen } from 'lucide-react';
 import { useStore } from '../store/useStore'; // Assurez-vous que le chemin est correct
 import axios from 'axios';
-import api from '../api/api';
 
 export function Login() {
   const navigate = useNavigate();
@@ -30,6 +29,7 @@ export function Login() {
         username: data.username,
       });
       setToken(data.access_token); // Ajoutez cette ligne
+      localStorage.setItem('token', data.access_token); // Stocker le token dans le localStorage
       navigate('/');
     } catch (error) {
       setError('Invalid username or password');
