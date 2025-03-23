@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import api from '../api/api';
+import SelectableButton from '../components/SelectableButton';
+import { BookOpen, ClipboardList } from 'lucide-react'; // Importez les icônes que vous souhaitez utiliser
 
 export function SelectTopics() {
     const navigate = useNavigate();
@@ -38,50 +40,48 @@ export function SelectTopics() {
     };
 
     const startExercise = () => {
+        
         if (selectedTopics.length > 0 && selectedExerciseType) {
-        navigate('/exercise');
+            console.log(selectedTopics);
+            console.log(selectedExerciseType);
+            navigate('/exercise');
         }
     };
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-            <div className="sm:mx-auto sm:w-full sm:max-w-md">
+            <div className="sm:mx-auto sm:w-full ">
                 <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
                     Select Topics and Exercise Type
                 </h2>
                 <div className="mt-8 space-y-6">
-                    <div>
-                        <h3 className="text-lg font-medium text-gray-900">Topics</h3>
+                    <h3 className="text-lg font-medium text-gray-900">Topics</h3>
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         {topics.map((topic) => (
-                        <div key={topic.id} className="bg-white p-4 rounded-lg shadow">
-                            <button
+                        <div key={topic.id} className="bg-white rounded-lg shadow">
+                            <SelectableButton
+                            isSelected={selectedTopics.some((t) => t.id === topic.id)}
                             onClick={() => toggleTopic(topic)}
-                            className={`${
-                                selectedTopics.some((t) => t.id === topic.id)
-                                ? 'bg-indigo-600 text-white'
-                                : 'bg-gray-200 text-gray-900'
-                            } w-full py-2 px-4 rounded-md`}
-                            >
-                                {topic.nom}
-                            </button>
+                            icon={BookOpen} // Utilisez l'icône que vous souhaitez
+                            title={topic.nom}
+                            description={topic.description}
+                            />
                         </div>
                         ))}
                     </div>
-                    <div>
-                        <h3 className="text-lg font-medium text-gray-900">Exercise Types</h3>
+
+                    <h3 className="text-lg font-medium text-gray-900">Exercise Types</h3>
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         {exerciseTypes.map((type) => (
-                            <div key={type.id} className="bg-white p-4 rounded-lg shadow">
-                                <button
-                                onClick={() => setSelectedExerciseType(type.id)}
-                                className={`${
-                                    selectedExerciseType === type.id
-                                    ? 'bg-indigo-600 text-white'
-                                    : 'bg-gray-200 text-gray-900'
-                                } w-full py-2 px-4 rounded-md`}
-                                >
-                                    {type.nom}
-                                </button>
-                            </div>
+                        <div key={type.id} className="bg-white rounded-lg shadow">
+                            <SelectableButton
+                            isSelected={selectedExerciseType === type.id}
+                            onClick={() => setSelectedExerciseType(type.id)}
+                            icon={ClipboardList} // Utilisez l'icône que vous souhaitez
+                            title={type.nom}
+                            description={type.description}
+                            />
+                        </div>
                         ))}
                     </div>
                 </div>
