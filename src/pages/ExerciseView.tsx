@@ -1,80 +1,74 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useStore } from '../store/useStore';
+import api from '../api/api';
 import type { Question } from '../types';
-
-// Simulated questions (replace with actual API call)
-const mockQuestions: Question[] = [
-  {
-    id: '1',
-    text: 'What is the capital of France?',
-    type: 'mcq',
-    options: ['London', 'Berlin', 'Paris', 'Madrid'],
-    correctAnswer: 'Paris'
-  },
-  {
-    id: '2',
-    text: 'Explain the concept of photosynthesis in your own words.',
-    type: 'text'
-  }
-];
 
 export function ExerciseView() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [tentative, setTentative] = useState<any>(null);
   
   const selectedTopics = useStore((state) => state.selectedTopics);
-  const updatePerformance = useStore((state) => state.updatePerformance);
-  const addCompletedExercise = useStore((state) => state.addCompletedExercise);
 
-  const currentQuestion = mockQuestions[currentQuestionIndex];
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        const data = await api.get(`/questions/exercice/${id}`);
+        const tentative = await api.post(`/tentatives/`, { exercice_id: id });
+
+        setTentative(tentative);
+        setQuestions(data);
+      } catch (error) {
+        console.error('Error fetching questions:', error);
+      }
+    };
+
+    fetchQuestions();
+  }, [id]);
+
+  const currentQuestion = questions[currentQuestionIndex];
 
   const handleAnswer = (answer: string) => {
     setAnswers({ ...answers, [currentQuestion.id]: answer });
   };
 
-  const handleNext = () => {
-    if (currentQuestionIndex < mockQuestions.length - 1) {
+  const handleNext = async () => {
+    if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-      // Calculate performance
-      const correctAnswers = mockQuestions.filter(
-        (q) => q.correctAnswer === answers[q.id]
-      ).length;
-      const score = (correctAnswers / mockQuestions.length) * 100;
-      
-      // Update overall performance
-      updatePerformance({
-        totalExercises: mockQuestions.length,
-        correctAnswers,
-        topicsCompleted: selectedTopics.map(t => t.id),
-        averageScore: score
-      });
+      // Soumettre les réponses
+      try {
+        for (const questionId in answers) {
+          await api.post(`/tentatives/${tentative.id}/reponses`, {
+            contenu: answers[questionId],
+            tentative_id: tentative.id,
+            question_id: parseInt(questionId, 10)
+          });
+        }
 
-      // Add completed exercise
-      selectedTopics.forEach(topic => {
-        addCompletedExercise({
-          id: Date.now().toString(),
-          topicId: topic.id,
-          date: new Date().toISOString(),
-          score,
-          questions: mockQuestions,
-          answers
-        });
-      });
-      
-      navigate('/exercise/' + id + '/report');
+        // Terminer la tentative
+        const response = await api.post(`/tentatives/${tentative.id}/terminer`, {});
+        navigate(`/exercise/${id}/report`);
+      } catch (error) {
+        console.error('Error submitting answers:', error);
+      }
     }
   };
+
+  if (!currentQuestion) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="max-w-3xl mx-auto space-y-8">
       <div className="bg-white shadow rounded-lg p-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold text-gray-900">
-            Question {currentQuestionIndex + 1} of {mockQuestions.length}
+            Question {currentQuestionIndex + 1} of {questions.length}
           </h2>
           <div className="text-sm text-gray-500">
             Topics: {selectedTopics.map(t => t.name).join(', ')}
@@ -82,7 +76,7 @@ export function ExerciseView() {
         </div>
 
         <div className="space-y-4">
-          <p className="text-lg text-gray-700">{currentQuestion.text}</p>
+          <p className="text-lg text-gray-700">{currentQuestion.enonce}</p>
 
           {currentQuestion.type === 'mcq' ? (
             <div className="space-y-2">
@@ -115,7 +109,7 @@ export function ExerciseView() {
             onClick={handleNext}
             className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            {currentQuestionIndex < mockQuestions.length - 1 ? 'Next Question' : 'Finish'}
+            {currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'Finish'}
           </button>
         </div>
       </div>
