@@ -66,7 +66,7 @@ export function Training() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{exercise.type_exercice.nom}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       <button
-                        onClick={() => navigate(`/exercices/${exercise.id}`)}
+                        onClick={() => navigate(`/exercise/${exercise.id}`)}
                         className="text-indigo-600 hover:text-indigo-900"
                       >
                         <svg
