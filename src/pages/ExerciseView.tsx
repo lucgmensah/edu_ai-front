@@ -22,6 +22,8 @@ export function ExerciseView() {
 
         setTentative(tentative);
         setQuestions(data);
+
+        console.log(data);
       } catch (error) {
         console.error('Error fetching questions:', error);
       }
@@ -78,7 +80,7 @@ export function ExerciseView() {
         <div className="space-y-4">
           <p className="text-lg text-gray-700">{currentQuestion.enonce}</p>
 
-          {currentQuestion.type === 'mcq' ? (
+          {currentQuestion.options?.length > 0 ? (
             <div className="space-y-2">
               {currentQuestion.options?.map((option) => (
                 <button
@@ -90,7 +92,7 @@ export function ExerciseView() {
                       : 'bg-white border-gray-300 hover:bg-gray-50'
                   } w-full text-left px-4 py-3 border rounded-md transition-colors duration-150`}
                 >
-                  {option}
+                  {option.option}
                 </button>
               ))}
             </div>

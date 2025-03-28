@@ -45,21 +45,29 @@ export function SelectTopics() {
         if (selectedTopics.length > 0 && selectedExerciseType) {
             setLoading(true);
             try {
+                // Construire les données de l'exercice
                 const exercise = {
-                    titre: 'New Exercise',
-                    description: 'Generated exercise',
-                    difficulte: 1,
-                    duree_estimee: 30,
-                    thematique_id: selectedTopics[0].id, // Assuming one topic for simplicity
-                    type_exercice_id: selectedExerciseType
+                    titre: 'New Exercise', // Vous pouvez personnaliser ce titre
+                    description: 'Generated exercise', // Vous pouvez personnaliser cette description
+                    difficulte: 1, // Vous pouvez ajuster la difficulté
+                    duree_estimee: 30, // Durée estimée en minutes
+                    thematique_id: selectedTopics[0].id, // Utilise le premier topic sélectionné
+                    type_exercice_id: selectedExerciseType // Type d'exercice sélectionné
                 };
+    
+                // Envoyer la requête POST pour créer l'exercice
                 const createdExercise = await api.post('/exercices/', exercise);
+    
+                // Rediriger vers la page de l'exercice créé
                 navigate(`/exercise/${createdExercise.id}`);
             } catch (error) {
                 console.error('Error creating exercise:', error);
+                alert('An error occurred while creating the exercise. Please try again.');
             } finally {
                 setLoading(false);
             }
+        } else {
+            alert('Please select at least one topic and an exercise type.');
         }
     };
 
